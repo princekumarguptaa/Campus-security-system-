@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CityGuard Campus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f13;
+    --surface: rgba(22, 24, 31, 0.85);
+    --surface2: rgba(30, 32, 40, 0.9);
+    --border: #2a2d38;
+    --accent: #ff4d4d;
+    --accent2: #ff8c42;
+    --green: #22c55e;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --text: #e8eaf0;
+    --muted: #9ca3af;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    /* Background Image setup with a dark overlay for readability */
+    background: linear-gradient(rgba(14, 15, 19, 0.8), rgba(14, 15, 19, 0.85)), 
+                url('/static/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 60px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(14, 15, 19, 0.9);
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+  .nav-btn {
+    background: none; border: none; color: var(--muted);
+    font-family: var(--sans); font-size: 14px; font-weight: 500;
+    cursor: pointer; padding: 6px 12px; border-radius: 6px;
+    transition: all .15s;
+  }
+  .nav-btn:hover, .nav-btn.active { color: var(--text); background: var(--surface2); }
+  .pending-badge {
+    background: var(--accent); color: #fff;
+    font-size: 11px; font-weight: 700; font-family: var(--mono);
+    padding: 2px 6px; border-radius: 20px; margin-left: 4px;
+  }
+
+  /* ── PAGES ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 680px; margin: 0 auto;
+    padding: 80px 24px 60px;
+    text-align: center;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent); border: 1px solid rgba(255,77,77,0.3);
+    padding: 4px 12px; border-radius: 20px; margin-bottom: 24px;
+    letter-spacing: 1px; text-transform: uppercase;
+    background: rgba(14, 15, 19, 0.6);
+  }
+  .hero h1 {
+    font-family: var(--mono); font-size: clamp(32px, 6vw, 52px);
+    font-weight: 700; line-height: 1.1;
+    letter-spacing: -2px; margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--muted); font-size: 16px; max-width: 480px;
+    margin: 0 auto 40px;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--accent); color: #fff;
+    font-family: var(--mono); font-size: 14px; font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 14px 28px; border-radius: 8px;
+    border: none; cursor: pointer;
+    transition: all .15s;
+    text-transform: uppercase;
+  }
+  .btn-primary:hover { background: #ff3333; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .stats-row {
+    display: flex; justify-content: center; gap: 40px;
+    margin-top: 60px; padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono); font-size: 28px; font-weight: 700;
+    color: var(--text);
+  }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── FORMS & CARDS ── */
+  .form-wrap { max-width: 580px; margin: 0 auto; padding: 48px 24px; }
+  .form-card, .admin-login { 
+    background: var(--surface); 
+    border: 1px solid var(--border); 
+    border-radius: 12px; 
+    padding: 28px;
+    backdrop-filter: blur(12px);
+  }
+  .field { margin-bottom: 20px; }
+  label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 8px; font-family: var(--mono); }
+  input, textarea, select { width: 100%; background: rgba(30, 32, 40, 0.8); border: 1px solid var(--border); color: var(--text); font-family: var(--sans); font-size: 15px; padding: 12px 14px; border-radius: 8px; outline: none; }
+  input:focus, textarea:focus { border-color: var(--accent); }
+  .submit-btn { width: 100%; background: var(--accent); color: #fff; font-family: var(--mono); font-size: 14px; font-weight: 700; padding: 14px; border-radius: 8px; border: none; cursor: pointer; text-transform: uppercase; }
+  
+  .report-card, .admin-card { 
+    background: var(--surface); 
+    border: 1px solid var(--border); 
+    border-radius: 10px; 
+    padding: 18px 20px; 
+    margin-bottom: 10px;
+    backdrop-filter: blur(12px);
+  }
+  .issue-type { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
+  .status-badge { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 4px; float: right; text-transform: uppercase; }
+  .type-fight { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .status-pending { background: rgba(245,158,11,0.15); color: var(--yellow); }
+  .status-resolved { background: rgba(34,197,94,0.15); color: var(--green); }
+  
+  #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--accent); color: var(--text); padding: 12px 20px; border-radius: 8px; opacity: 0; transition: 0.25s; z-index: 999; font-family: var(--mono); font-size: 13px; }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .card-img img { width: 100%; border-radius: 6px; margin-top: 10px; border: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><div class="logo-dot"></div>CITYGUARD<span style="color:var(--accent)">.</span>CAMPUS</div>
+  <div class="nav-links">
+    <button class="nav-btn active" id="btn-home" onclick="showPage('home')">Home</button>
+    <button class="nav-btn" id="btn-feed" onclick="showPage('feed')">Feed <span class="pending-badge" id="nav-pending">0</span></button>
+    <button class="nav-btn" id="btn-admin" onclick="showPage('admin')">Admin</button>
+  </div>
+</nav>
+
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-tag">🛡 Student Safety Network</div>
+    <h1>Report. Track.<br><span>Stay Safe.</span></h1>
+    <p>Submit issues anonymously and help keep campus safe.</p>
+    <button class="btn-primary" onclick="prepareNewReport()">⚠ Report an Issue</button>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total</div></div>
+      <div class="stat"><div class="stat-num" id="stat-pending" style="color:var(--yellow)">0</div><div class="stat-label">Pending</div></div>
+      <div class="stat"><div class="stat-num" id="stat-resolved" style="color:var(--green)">0</div><div class="stat-label">Resolved</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-report">
+  <div class="form-wrap">
+    <div class="form-card" id="report-form-card">
+      <div class="field"><label>Issue Type *</label>
+        <select id="issue-type">
+          <option value="fight">⚔ Fight</option>
+          <option value="medical">🚑 Medical</option>
+          <option value="theft">🔐 Theft</option>
+          <option value="other">📌 Other</option>
+        </select>
+      </div>
+      <div class="field"><label>Description *</label><textarea id="issue-desc" placeholder="Details..."></textarea></div>
+      <div class="field"><label>Location *</label><input type="text" id="issue-location" placeholder="Where?"></div>
+      <div class="field">
+        <label>Image (optional)</label>
+        <input type="file" id="img-input" accept="image/*" onchange="handleImage(this)">
+        <div id="img-preview" style="display:none; margin-top:10px;"><img id="preview-img" style="max-height:150px;"></div>
+      </div>
+      <button class="submit-btn" onclick="submitReport()">Submit Report</button>
+    </div>
+    <div id="success-msg" style="display:none; text-align:center; padding:40px; background:var(--surface); border:1px solid var(--border); border-radius:12px; backdrop-filter:blur(12px);">
+      <h2>✅ Submitted!</h2>
+      <button class="btn-primary" style="margin-top:20px;" onclick="showPage('feed')">View Feed</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-feed">
+  <div class="form-wrap">
+    <h2 style="margin-bottom:20px; font-family:var(--mono);">Live Feed</h2>
+    <div id="feed-list"></div>
+  </div>
+</div>
+
+<div class="page" id="page-admin">
+  <div id="admin-login-section" class="form-wrap">
+    <div class="admin-login">
+      <h2>Admin Login</h2>
+      <input type="password" id="admin-password" placeholder="Password" style="margin:20px 0;">
+      <button class="submit-btn" onclick="adminLogin()">Login</button>
+    </div>
+  </div>
+  <div id="admin-dashboard" style="display:none" class="form-wrap">
+    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+        <h2>Dashboard</h2>
+        <button onclick="location.reload()" class="nav-btn">Logout</button>
+    </div>
+    <div id="admin-list"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+let imgBase64 = null;
+let adminLoggedIn = false;
+let lastSubmitTime = 0;
+const COOLDOWN_MS = 30000; // 30-Seconds Limit
+
+// PAGE NAVIGATION
+async function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  
+  document.getElementById('page-' + id).classList.add('active');
+  const activeBtn = document.getElementById('btn-' + id);
+  if(activeBtn) activeBtn.classList.add('active');
+  
+  if(id === 'feed') renderFeed();
+  if(id === 'admin' && adminLoggedIn) renderAdmin();
+  if(id === 'home' || id === 'report') updateStats();
+}
+
+function prepareNewReport() {
+  document.getElementById('report-form-card').style.display = 'block';
+  document.getElementById('success-msg').style.display = 'none';
+  showPage('report');
+}
+
+// IMAGE HANDLING
+function handleImage(input) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    imgBase64 = e.target.result;
+    document.getElementById('preview-img').src = imgBase64;
+    document.getElementById('img-preview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// API CALLS
+async function updateStats() {
+  try {
+    const res = await fetch('/api/reports');
+    const data = await res.json();
+    document.getElementById('stat-total').textContent = data.length;
+    document.getElementById('stat-pending').textContent = data.filter(x => x.status === 'pending').length;
+    document.getElementById('stat-resolved').textContent = data.filter(x => x.status === 'resolved').length;
+    document.getElementById('nav-pending').textContent = data.filter(x => x.status === 'pending').length;
+  } catch(e) { console.error("Stats check failed"); }
+}
+
+async function submitReport() {
+  // ── 30-SECONDS THROTTLE LOGIC ──
+  const now = Date.now();
+  if (now - lastSubmitTime < COOLDOWN_MS) {
+    const remaining = Math.ceil((COOLDOWN_MS - (now - lastSubmitTime)) / 1000);
+    showToast(`Please wait ${remaining}s before next report`);
+    return;
+  }
+
+  const desc = document.getElementById('issue-desc').value.trim();
+  const loc = document.getElementById('issue-location').value.trim();
+  const type = document.getElementById('issue-type').value;
+
+  if (!desc || !loc) {
+    showToast("Please fill all required fields");
+    return;
+  }
+
+  const payload = { type, desc, loc, image: imgBase64 };
+
+  try {
+    const res = await fetch('/api/reports', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    if(res.ok) {
+      lastSubmitTime = Date.now(); // Update cooldown timestamp
+      document.getElementById('report-form-card').style.display = 'none';
+      document.getElementById('success-msg').style.display = 'block';
+      
+      // Clean inputs for future reports
+      document.getElementById('issue-desc').value = "";
+      document.getElementById('issue-location').value = "";
+      document.getElementById('img-input').value = "";
+      document.getElementById('img-preview').style.display = 'none';
+      imgBase64 = null;
+      
+      updateStats();
+    }
+  } catch(e) {
+    showToast("Connection failed");
+  }
+}
+
+async function renderFeed() {
+  const res = await fetch('/api/reports');
+  const data = await res.json();
+  const list = document.getElementById('feed-list');
+  
+  if(data.length === 0) {
+    list.innerHTML = `<p style="text-align:center; color:var(--muted); margin-top:20px;">No active reports.</p>`;
+    return;
+  }
+
+  list.innerHTML = data.map(r => `
+    <div class="report-card">
+      <span class="status-badge status-${r.status}">${r.status}</span>
+      <span class="issue-type type-fight">${r.type}</span>
+      <p style="margin:10px 0;">${r.desc}</p>
+      <small style="color:var(--muted)">📍 ${r.loc}</small>
+      ${r.image ? `<div class="card-img"><img src="${r.image}"></div>` : ''}
+    </div>
+  `).join('');
+}
+
+async function adminLogin() {
+  const password = document.getElementById('admin-password').value;
+  const res = await fetch('/api/admin/login', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({password})
+  });
+
+  if(res.ok) {
+    adminLoggedIn = true;
+    document.getElementById('admin-login-section').style.display = 'none';
+    document.getElementById('admin-dashboard').style.display = 'block';
+    renderAdmin();
+  } else {
+    showToast("Wrong Password");
+  }
+}
+
+async function renderAdmin() {
+  const res = await fetch('/api/reports');
+  const data = await res.json();
+  const list = document.getElementById('admin-list');
+  list.innerHTML = data.map(r => `
+    <div class="admin-card">
+      <div style="margin-bottom:10px;">
+        <span class="issue-type type-fight">${r.type}</span>
+        ${r.status === 'pending' ? 
+          `<button onclick="updateStatus('${r.id}', 'resolved')" style="float:right; padding:4px 8px; cursor:pointer; background:var(--green); border:none; color:white; border-radius:4px; font-weight:bold;">Resolve</button>` : 
+          `<span class="status-badge status-resolved">Resolved</span>`
+        }
+      </div>
+      <p>${r.desc}</p>
+      <small>📍 ${r.loc} | Status: ${r.status}</small>
+    </div>
+  `).join('');
+}
+
+async function updateStatus(id, status) {
+  await fetch(`/api/reports/${id}`, {
+    method: 'PATCH',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({status})
+  });
+  renderAdmin();
+  updateStats();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Initial update
+updateStats();
+</script>
+</body>
+</html>
