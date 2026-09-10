@@ -26,6 +26,7 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  
   body {
     /* Background Image setup with a dark overlay for readability */
     background: linear-gradient(rgba(14, 15, 19, 0.8), rgba(14, 15, 19, 0.85)), 
@@ -170,6 +171,104 @@
   #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--accent); color: var(--text); padding: 12px 20px; border-radius: 8px; opacity: 0; transition: 0.25s; z-index: 999; font-family: var(--mono); font-size: 13px; }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .card-img img { width: 100%; border-radius: 6px; margin-top: 10px; border: 1px solid var(--border); }
+
+.chatbot-container{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 360px;
+    height: 400px;
+    background: rgba(18,18,25,0.95);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    overflow: hidden;
+    z-index: 99999;
+    backdrop-filter: blur(14px);
+    box-shadow:
+        0 0 30px rgba(0,0,0,0.5),
+        0 0 15px rgba(255,77,77,0.15);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header{
+    padding: 16px;
+    background: linear-gradient(
+        90deg,
+        rgba(15, 14, 14, 0.2),
+        rgba(255,140,66,0.15)
+    );
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chat-dot{
+    width: 10px;
+    height: 10px;
+    background: #22c55e;
+    border-radius: 50%;
+}
+
+.chat-title{
+    color: rgb(232, 225, 225);
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+#chat-box{
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.user-msg{
+    align-self: flex-end;
+    background: #2563eb;
+    color: rgb(235, 229, 229);
+    padding: 10px 14px;
+    border-radius: 14px 14px 4px 14px;
+    max-width: 80%;
+}
+
+.bot-msg{
+    align-self: flex-start;
+    background: rgba(255,255,255,0.08);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 14px 14px 14px 4px;
+    max-width: 80%;
+}
+
+.chat-input{
+    display: flex;
+    padding: 12px;
+    gap: 10px;
+}
+
+.chat-input input{
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border: none;
+    color: rgb(231, 221, 221);
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.chat-input button{
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
 </style>
 </head>
 <body>
@@ -423,6 +522,110 @@ function showToast(msg) {
 
 // Initial update
 updateStats();
+</script>
+
+
+<div class="chatbot-container">
+
+    <div class="chat-header">
+
+        <div class="chat-dot"></div>
+
+        <div class="chat-title">
+            CITYGUARD AI
+        </div>
+
+    </div>
+
+    <div id="chat-box">
+
+        <div class="bot-msg">
+            Hello 👋<br>
+            I am your Campus Security Assistant.
+        </div>
+
+    </div>
+
+    <div class="chat-input">
+
+        <input type="text"
+               id="message"
+               placeholder="Ask something...">
+
+        <button onclick="sendMessage()">
+            Send
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+async function sendMessage() {
+
+    const input = document.getElementById("message");
+    const message = input.value.trim();
+
+    if (!message) return;
+
+    const chatBox = document.getElementById("chat-box");
+
+    // Show user message
+    const userDiv = document.createElement("div");
+    userDiv.className = "user-msg";
+    userDiv.textContent = message;
+    chatBox.appendChild(userDiv);
+
+    input.value = "";
+
+    // Show loading message
+    const loadingDiv = document.createElement("div");
+    loadingDiv.className = "bot-msg";
+    loadingDiv.textContent = "Thinking...";
+    chatBox.appendChild(loadingDiv);
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    try {
+
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: message
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.response || "Server error");
+        }
+
+        loadingDiv.textContent = data.response || "Sorry, I couldn't generate a response.";
+
+    } catch (error) {
+
+        console.error("Chatbot error:", error);
+
+        loadingDiv.textContent =
+            "Sorry, the AI assistant is currently unavailable.";
+    }
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+document.getElementById("message").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+});
+
+  
+
 </script>
 </body>
 </html>
