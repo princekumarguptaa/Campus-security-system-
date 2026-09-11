@@ -563,7 +563,6 @@ updateStats();
 <script>
 
 async function sendMessage() {
-
     const input = document.getElementById("message");
     const message = input.value.trim();
 
@@ -571,7 +570,6 @@ async function sendMessage() {
 
     const chatBox = document.getElementById("chat-box");
 
-    // Show user message
     const userDiv = document.createElement("div");
     userDiv.className = "user-msg";
     userDiv.textContent = message;
@@ -579,16 +577,12 @@ async function sendMessage() {
 
     input.value = "";
 
-    // Show loading message
     const loadingDiv = document.createElement("div");
     loadingDiv.className = "bot-msg";
     loadingDiv.textContent = "Thinking...";
     chatBox.appendChild(loadingDiv);
 
-    chatBox.scrollTop = chatBox.scrollHeight;
-
     try {
-
         const response = await fetch("/chat", {
             method: "POST",
             headers: {
@@ -605,10 +599,10 @@ async function sendMessage() {
             throw new Error(data.response || "Server error");
         }
 
-        loadingDiv.textContent = data.response || "Sorry, I couldn't generate a response.";
+        loadingDiv.textContent =
+            data.response || "Sorry, I couldn't generate a response.";
 
     } catch (error) {
-
         console.error("Chatbot error:", error);
 
         loadingDiv.textContent =
@@ -624,7 +618,6 @@ document.getElementById("message").addEventListener("keydown", function(event) {
     }
 });
 
-  
 
 </script>
 </body>
