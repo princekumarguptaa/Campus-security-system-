@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, jsonify, session 
+from flask import Flask, render_template, request, jsonify, session, Response
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from camera import generate_frames
 import os
 
 from chatbot import get_ai_response
@@ -200,6 +201,13 @@ def admin_login():
         "success": False,
         "message": "Invalid password"
     }), 401
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(
+        generate_frames(),
+        mimetype='multipart/x-mixed-replace; boundary=frame'
+    )
 
 
 if __name__ == '__main__':

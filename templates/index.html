@@ -293,7 +293,89 @@
       <div class="stat"><div class="stat-num" id="stat-pending" style="color:var(--yellow)">0</div><div class="stat-label">Pending</div></div>
       <div class="stat"><div class="stat-num" id="stat-resolved" style="color:var(--green)">0</div><div class="stat-label">Resolved</div></div>
     </div>
+   </div>
+
+  
+  <!-- AI CAMERA MONITOR -->
+
+  <div style="
+      max-width:1100px;
+      margin:0 auto 60px;
+      padding:0 24px;
+  ">
+
+    <div style="
+        background:rgba(22,24,31,0.85);
+        border:1px solid var(--border);
+        border-radius:12px;
+        padding:20px;
+        backdrop-filter:blur(12px);
+    ">
+
+      <!-- CAMERA HEADER -->
+
+      <div style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          margin-bottom:15px;
+      ">
+
+        <h2 style="
+            font-family:var(--poppins);
+            font-size:20px;
+        ">
+           AI Camera Monitor
+        </h2>
+
+        <span style="
+            background:rgba(34,197,94,0.15);
+            color:var(--green);
+            padding:5px 10px;
+            border-radius:20px;
+            font-family:var(--mono);
+            font-size:12px;
+        ">
+          ● LIVE
+        </span>
+
+      </div>
+
+
+      <!-- LIVE CAMERA -->
+
+      <div style="
+          background:#000;
+          border-radius:10px;
+          overflow:hidden;
+      ">
+
+        <img
+          src="/video_feed"
+          alt="CityGuard AI Camera"
+          style="
+              width:100%;
+              display:block;
+          "
+        >
+
+      </div>
+
+
+      <!-- CAMERA INFORMATION -->
+
+      <p style="
+          color:var(--muted);
+          margin-top:12px;
+          font-size:13px;
+      ">
+        AI-powered person detection and large gathering monitoring.
+      </p>
+
+    </div>
+
   </div>
+
 </div>
 
 <div class="page" id="page-report">
