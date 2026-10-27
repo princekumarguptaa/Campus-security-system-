@@ -13,7 +13,7 @@ if not camera.isOpened():
     exit()
 
 # Gathering settings
-GROUP_THRESHOLD = 3       # Minimum people
+GROUP_THRESHOLD = 3      # Minimum people
 GROUP_DURATION = 5        # Seconds
 
 group_start_time = None
